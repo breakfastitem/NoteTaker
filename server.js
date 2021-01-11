@@ -54,6 +54,24 @@ app.post("/api/notes", (req,res)=>{
     
 });
 
+//Delete Methods
+app.delete("/api/notes/:id",(req,res)=>{
+    
+    fs.readFile(__dirname+"/db/db.json",(err,data)=>{
+        if(err) return err;
+
+        let notesObject = JSON.parse(data);
+
+        notesObject.reduce(note=> note.id==req.params.id);
+
+        fs.writeFile(__dirname+"/db/db.json",JSON.stringify(notesObject),(err)=>{
+            if(err) return err;
+
+            res.sendStatus(200);
+        });
+    });
+});
+
 
 app.listen(PORT);
 
