@@ -26,6 +26,34 @@ app.get("/api/notes", (req,res)=>{
     res.sendFile(__dirname+"/db/db.json");
 });
 
+//Post Methods
+app.post("/api/notes", (req,res)=>{
+
+    const note = {
+        title:req.body.title,
+        text:req.body.text
+    };
+
+    if(note.title==undefined||note.text==undefined){
+        res.sendStatus(400);
+    }
+
+    fs.readFile(__dirname+"/db/db.json",(err,data)=>{
+        if(err) return err;
+
+        let notesObject = JSON.parse(data);
+
+        notesObject.push(note);
+
+        fs.writeFile(__dirname+"/db/db.json",JSON.stringify(notesObject),(err)=>{
+            if(err) return err;
+
+            res.sendStatus(200);
+        });
+    });
+    
+});
+
 
 app.listen(PORT);
 
