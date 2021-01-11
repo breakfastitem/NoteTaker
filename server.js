@@ -29,7 +29,7 @@ app.get("/api/notes", (req,res)=>{
 //Post Methods
 app.post("/api/notes", (req,res)=>{
 
-    const note = {
+    let note = {
         title:req.body.title,
         text:req.body.text
     };
@@ -42,6 +42,7 @@ app.post("/api/notes", (req,res)=>{
         if(err) return err;
 
         let notesObject = JSON.parse(data);
+        note.id=notesObject.length;
 
         notesObject.push(note);
 
@@ -56,15 +57,21 @@ app.post("/api/notes", (req,res)=>{
 
 //Delete Methods
 app.delete("/api/notes/:id",(req,res)=>{
-    
+    console.log(req.params.id);
+
     fs.readFile(__dirname+"/db/db.json",(err,data)=>{
         if(err) return err;
 
         let notesObject = JSON.parse(data);
 
-        notesObject.reduce(note=> note.id==req.params.id);
+        let filteredNotes= notesObject.filter(note=> note.id!=req.params.id);
 
-        fs.writeFile(__dirname+"/db/db.json",JSON.stringify(notesObject),(err)=>{
+        //set id's
+        for(let i= req.params.id;i<filteredNotes.length;i++){
+            filteredNotes[i].id=i;
+        }
+
+        fs.writeFile(__dirname+"/db/db.json",JSON.stringify(filteredNotes),(err)=>{
             if(err) return err;
 
             res.sendStatus(200);
