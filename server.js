@@ -9,6 +9,14 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+//Allow app to use public folder.
+app.use(express.static(__dirname+"/public"));
+
+//Get Methods
+app.get("/notes", (req,res)=>{
+    res.sendFile(__dirname+"/public/notes.html");
+});
+
 
 app.listen(PORT);
 
