@@ -1,4 +1,5 @@
 const express = require("express");
+const fs = require("fs");
 
 const PORT = process.env.PORT;
 
@@ -17,8 +18,12 @@ app.get("/notes", (req,res)=>{
     res.sendFile(__dirname+"/public/notes.html");
 });
 
-app.get("*",(req,res)=>{
+app.get("/",(req,res)=>{
     res.sendFile(__dirname+"/public/index.html");
+});
+
+app.get("/api/notes", (req,res)=>{
+    res.sendFile(__dirname+"/db/db.json");
 });
 
 
