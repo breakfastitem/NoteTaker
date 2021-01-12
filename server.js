@@ -46,7 +46,7 @@ app.post("/api/notes", (req,res)=>{
         if(err) return err;
 
         let notesObject = JSON.parse(data);
-        note.id=notesObject.length;
+        note.id=notesObject.length+1;
 
         notesObject.push(note);
 
@@ -71,8 +71,8 @@ app.delete("/api/notes/:id",(req,res)=>{
         let filteredNotes= notesObject.filter(note=> note.id!=req.params.id);
 
         //set id's
-        for(let i= req.params.id;i<filteredNotes.length;i++){
-            filteredNotes[i].id=i;
+        for(let i= req.params.id;i<=filteredNotes.length;i++){
+            filteredNotes[i-1].id=i;
         }
 
         fs.writeFile(__dirname+"/db/db.json",JSON.stringify(filteredNotes),(err)=>{
