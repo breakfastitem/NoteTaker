@@ -26,6 +26,10 @@ app.get("/api/notes", (req,res)=>{
     res.sendFile(__dirname+"/db/db.json");
 });
 
+app.get("*",(req,res)=>{
+    res.sendStatus(404);
+});
+
 //Post Methods
 app.post("/api/notes", (req,res)=>{
 
