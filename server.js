@@ -1,5 +1,6 @@
 const express = require("express");
 const fs = require("fs");
+const path = require("path");
 
 const PORT = process.env.PORT;
 
@@ -11,19 +12,19 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //Allow app to use public folder.
-app.use(express.static(__dirname+"/public"));
+app.use(express.static(path.join(__dirname,"/public")));
 
 //Get Methods
 app.get("/notes", (req,res)=>{
-    res.sendFile(__dirname+"/public/notes.html");
+    res.sendFile(path.join(__dirname,"/public/notes.html"));
 });
 
 app.get("/",(req,res)=>{
-    res.sendFile(__dirname+"/public/index.html");
+    res.sendFile(path.join(__dirname,"/public/index.html"));
 });
 
 app.get("/api/notes", (req,res)=>{
-    res.sendFile(__dirname+"/db/db.json");
+    res.sendFile(path.join(__dirname,"/db/db.json"));
 });
 
 app.get("*",(req,res)=>{
@@ -42,7 +43,7 @@ app.post("/api/notes", (req,res)=>{
         res.sendStatus(400);
     }
 
-    fs.readFile(__dirname+"/db/db.json",(err,data)=>{
+    fs.readFile(path.join(__dirname,"/db/db.json"),(err,data)=>{
         if(err) return err;
 
         let notesObject = JSON.parse(data);
@@ -50,7 +51,7 @@ app.post("/api/notes", (req,res)=>{
 
         notesObject.push(note);
 
-        fs.writeFile(__dirname+"/db/db.json",JSON.stringify(notesObject),(err)=>{
+        fs.writeFile(path.join(__dirname,"/db/db.json"),JSON.stringify(notesObject),(err)=>{
             if(err) return err;
 
             res.sendStatus(200);
@@ -63,7 +64,7 @@ app.post("/api/notes", (req,res)=>{
 app.delete("/api/notes/:id",(req,res)=>{
     console.log(req.params.id);
 
-    fs.readFile(__dirname+"/db/db.json",(err,data)=>{
+    fs.readFile(path.join(__dirname,"/db/db.json"),(err,data)=>{
         if(err) return err;
 
         let notesObject = JSON.parse(data);
@@ -75,7 +76,7 @@ app.delete("/api/notes/:id",(req,res)=>{
             filteredNotes[i-1].id=i;
         }
 
-        fs.writeFile(__dirname+"/db/db.json",JSON.stringify(filteredNotes),(err)=>{
+        fs.writeFile(path.join(__dirname,"/db/db.json"),JSON.stringify(filteredNotes),(err)=>{
             if(err) return err;
 
             res.sendStatus(200);
